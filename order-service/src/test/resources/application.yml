@@ -1,0 +1,21 @@
+spring:  
+  application:
+    name: order-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+  cloud:  
+    stream:
+      bindings:
+        output:
+          destination: orders-out
+        input:
+          destination: orders-in
+      rabbit:
+        bindings:
+          input:
+            consumer:
+              exchangeType: direct
+
+server:  
+  port: ${PORT:8090}
