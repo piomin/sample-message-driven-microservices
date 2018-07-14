@@ -1,20 +1,16 @@
 package pl.piomin.services.account;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.cloud.sleuth.Sampler;
-import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.context.annotation.Bean;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import pl.piomin.services.account.model.Account;
 import pl.piomin.services.account.repository.AccountRepository;
 import pl.piomin.services.account.service.AccountService;
@@ -55,10 +51,4 @@ public class AccountApplication {
 		repository.add(new Account("1234567898", 50000, 3L));
 		return repository;
 	}
-
-	@Bean
-	public Sampler defaultSampler() {
-		return new AlwaysSampler();
-	}
-	
 }
