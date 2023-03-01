@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.cloud.sleuth.Sampler;
-import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
@@ -56,9 +54,9 @@ public class AccountApplication {
 		return repository;
 	}
 
-	@Bean
-	public Sampler defaultSampler() {
-		return new AlwaysSampler();
-	}
+//	@Bean
+//	public Sampler defaultSampler() {
+//		return new AlwaysSampler();
+//	}
 	
 }
