@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pl.piomin.services.messaging.Order;
+import pl.piomin.services.messaging.OrderStatus;
 import pl.piomin.services.order.messaging.OrderSender;
 import pl.piomin.services.order.repository.OrderRepository;
 
@@ -30,12 +31,16 @@ public class OrderController {
 	@Autowired
 	OrderSender sender;	
 	
-	@PostMapping
+	@PostMapping("/")
 	public Order process(@RequestBody Order order) throws JsonProcessingException {
 		Order o = repository.add(order);
 		LOGGER.info("Order saved: {}", mapper.writeValueAsString(order));
 		boolean isSent = sender.send(o);
 		LOGGER.info("Order sent: {}", mapper.writeValueAsString(Collections.singletonMap("isSent", isSent)));
+		if (isSent) {
+			o.setStatus(OrderStatus.PROCESSING);
+			repository.update(o);
+		}
 		return o;
 	}
 	

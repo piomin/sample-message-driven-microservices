@@ -8,6 +8,6 @@
   <artifactId>messaging-common</artifactId>
 
   <properties>
-    <sonar.moduleKey>${artifactId}</sonar.moduleKey>
+    <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
   </properties>
 </project>

@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import pl.piomin.services.messaging.Order;
-import pl.piomin.services.order.repository.OrderRepository;
 import pl.piomin.services.order.service.OrderService;
 
 import java.util.function.Consumer;
@@ -38,11 +37,6 @@ public class OrderApplication {
 				LOGGER.error("Error deserializing", e);
 			}
 		};
-	}
-	
-	@Bean
-	OrderRepository repository() {
-		return new OrderRepository();
 	}
 
 	@Bean
