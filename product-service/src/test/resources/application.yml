@@ -26,7 +26,9 @@ server:
       
 ---
 spring:
-  profiles: instance1
+  config:
+    activate:
+      on-profile: instance1
   cloud:
     stream:
       instanceCount: 2
@@ -36,7 +38,9 @@ server:
 
 ---
 spring:
-  profiles: instance2
+  config:
+    activate:
+      on-profile: instance2
   cloud:
     stream:
       instanceCount: 2

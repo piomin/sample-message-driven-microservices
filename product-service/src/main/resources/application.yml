@@ -2,7 +2,7 @@ spring:
   application:
     name: product-service
   rabbitmq:
-    host: 192.168.99.100
+    host: localhost
     port: 5672
   cloud:  
     stream:
@@ -31,7 +31,9 @@ eureka:
       
 ---
 spring:
-  profiles: instance1
+  config:
+    activate:
+      on-profile: instance1
   cloud:
     stream:
       instanceCount: 2
@@ -41,7 +43,9 @@ server:
 
 ---
 spring:
-  profiles: instance2
+  config:
+    activate:
+      on-profile: instance2
   cloud:
     stream:
       instanceCount: 2
