@@ -1,11 +1,9 @@
 package pl.piomin.services.account.repository;
 
+import pl.piomin.services.account.model.Account;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import pl.piomin.services.account.model.Account;
 
 public class AccountRepository {
 
@@ -23,11 +21,10 @@ public class AccountRepository {
 	}
 	
 	public Account findById(Long id) {
-		Optional<Account> account = accounts.stream().filter(a -> a.getId().equals(id)).findFirst();
-		if (account.isPresent())
-			return account.get();
-		else
-			return null;
+		return accounts.stream()
+				.filter(a -> a.getId().equals(id))
+				.findFirst()
+				.orElseThrow();
 	}
 	
 	public void delete(Long id) {
@@ -35,11 +32,15 @@ public class AccountRepository {
 	}
 	
 	public List<Account> find(List<Long> ids) {
-		return accounts.stream().filter(a -> ids.contains(a.getId())).collect(Collectors.toList());
+		return accounts.stream()
+				.filter(a -> ids.contains(a.getId()))
+				.toList();
 	}
 	
 	public List<Account> findByCustomer(Long customerId) {
-		return accounts.stream().filter(a -> a.getCustomerId().equals(customerId)).collect(Collectors.toList());
+		return accounts.stream()
+				.filter(a -> a.getCustomerId().equals(customerId))
+				.toList();
 	}
 	
 }

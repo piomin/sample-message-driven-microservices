@@ -3,7 +3,7 @@ package pl.piomin.services.order;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import pl.piomin.services.messaging.Order;

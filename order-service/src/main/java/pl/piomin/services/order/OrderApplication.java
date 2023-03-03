@@ -1,25 +1,21 @@
 package pl.piomin.services.order;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import pl.piomin.services.messaging.Order;
 import pl.piomin.services.order.repository.OrderRepository;
 import pl.piomin.services.order.service.OrderService;
 
+import java.util.function.Consumer;
+
 @SpringBootApplication
-@EnableBinding(Processor.class)
 public class OrderApplication {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderApplication.class);
@@ -29,13 +25,19 @@ public class OrderApplication {
 	OrderService service;
 	
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(OrderApplication.class).web(true).run(args);
+		SpringApplication.run(OrderApplication.class, args);
 	}
-	
-	@StreamListener(Processor.INPUT)
-	public void receiveOrder(Order order) throws JsonProcessingException {
-		LOGGER.info("Order received: {}", mapper.writeValueAsString(order));
-		service.process(order);
+
+	@Bean
+	public Consumer<Order> input() {
+		return order -> {
+			try {
+				LOGGER.info("Order received: {}", mapper.writeValueAsString(order));
+				service.process(order);
+			} catch (JsonProcessingException e) {
+				LOGGER.error("Error deserializing", e);
+			}
+		};
 	}
 	
 	@Bean

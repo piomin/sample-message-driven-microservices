@@ -2,7 +2,7 @@ spring:
   application:
     name: account-service
   rabbitmq:
-    host: 192.168.99.100
+    host: localhost
     port: 5672
   cloud:  
     stream:
@@ -36,7 +36,9 @@ management:
             
 ---
 spring:
-  profiles: instance1
+  config:
+    activate:
+      on-profile: instance1
   cloud:
     stream:
       instanceCount: 2
@@ -46,7 +48,9 @@ server:
 
 ---
 spring:
-  profiles: instance2
+  config:
+    activate:
+      on-profile: instance2
   cloud:
     stream:
       instanceCount: 2
