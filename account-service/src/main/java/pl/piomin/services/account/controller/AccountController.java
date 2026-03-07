@@ -1,24 +1,14 @@
 package pl.piomin.services.account.controller;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.springframework.web.bind.annotation.*;
 import pl.piomin.services.account.model.Account;
 import pl.piomin.services.account.repository.AccountRepository;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 public class AccountController {
@@ -27,8 +17,11 @@ public class AccountController {
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	@Autowired
-	AccountRepository repository;
+	private final AccountRepository repository;
+
+	public AccountController(AccountRepository repository) {
+		this.repository = repository;
+	}
 
 	@PostMapping
 	public Account add(@RequestBody Account account) {
@@ -41,7 +34,7 @@ public class AccountController {
 	}
 
 	@PutMapping("/withdraw/{id}/{amount}")
-	public Account withdraw(@PathVariable("id") Long id, @PathVariable("amount") int amount) throws JsonProcessingException {
+	public Account withdraw(@PathVariable("id") Long id, @PathVariable int amount) {
 		Account account = repository.findById(id);
 		LOGGER.info("Account found: {}", mapper.writeValueAsString(account));
 		account.setBalance(account.getBalance() - amount);
@@ -50,12 +43,12 @@ public class AccountController {
 	}
 
 	@GetMapping("/{id}")
-	public Account findById(@PathVariable("id") Long id) {
+	public Account findById(@PathVariable Long id) {
 		return repository.findById(id);
 	}
 
 	@GetMapping("/customer/{customerId}")
-	public List<Account> findByCustomerId(@PathVariable("customerId") Long customerId) {
+	public List<Account> findByCustomerId(@PathVariable Long customerId) {
 		return repository.findByCustomer(customerId);
 	}
 

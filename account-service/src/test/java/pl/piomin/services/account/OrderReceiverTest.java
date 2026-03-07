@@ -1,7 +1,5 @@
 package pl.piomin.services.account;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +12,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import pl.piomin.services.messaging.Order;
 import pl.piomin.services.messaging.OrderStatus;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
 
@@ -34,7 +33,7 @@ public class OrderReceiverTest {
 	private ObjectMapper mapper;
 
 	@Test
-	public void testAccepted() throws JsonProcessingException {
+	public void testAccepted() {
 		Order o = new Order();
 		o.setId(1L);
 		o.setAccountId(1L);
@@ -52,7 +51,7 @@ public class OrderReceiverTest {
 	}
 	
 	@Test
-	public void testRejected() throws JsonProcessingException {
+	public void testRejected() {
 		Order o = new Order();
 		o.setId(1L);
 		o.setAccountId(1L);
