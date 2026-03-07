@@ -4,7 +4,6 @@ import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pl.piomin.services.messaging.Order;
@@ -21,10 +20,13 @@ public class ProductService {
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	@Autowired
-	ProductRepository productRepository;
-	@Autowired
-	OrderSender orderSender;
+	private final ProductRepository productRepository;
+	private final OrderSender orderSender;
+
+	public ProductService(ProductRepository productRepository, OrderSender orderSender) {
+		this.productRepository = productRepository;
+		this.orderSender = orderSender;
+	}
 	
 	public void process(final Order order) {
 		LOGGER.info("Order processed: {}", mapper.writeValueAsString(order));

@@ -2,7 +2,6 @@ package pl.piomin.services.product;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +19,12 @@ public class ProductApplication {
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	@Autowired
-	ProductService service;
-	
+	private final ProductService service;
+
+	public ProductApplication(ProductService service) {
+		this.service = service;
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProductApplication.class, args);
 	}

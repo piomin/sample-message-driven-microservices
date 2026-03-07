@@ -2,7 +2,6 @@ package pl.piomin.services.account.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.piomin.services.account.model.Account;
 import pl.piomin.services.account.repository.AccountRepository;
@@ -18,8 +17,11 @@ public class AccountController {
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	@Autowired
-	AccountRepository repository;
+	private final AccountRepository repository;
+
+	public AccountController(AccountRepository repository) {
+		this.repository = repository;
+	}
 
 	@PostMapping
 	public Account add(@RequestBody Account account) {
