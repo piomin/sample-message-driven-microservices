@@ -1,16 +1,14 @@
 package pl.piomin.services.product;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import pl.piomin.services.messaging.Order;
 import pl.piomin.services.product.service.ProductService;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.function.Consumer;
 
@@ -21,9 +19,12 @@ public class ProductApplication {
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	@Autowired
-	ProductService service;
-	
+	private final ProductService service;
+
+	public ProductApplication(ProductService service) {
+		this.service = service;
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProductApplication.class, args);
 	}
@@ -31,12 +32,8 @@ public class ProductApplication {
 	@Bean
 	public Consumer<Order> input() {
 		return order -> {
-			try {
-				LOGGER.info("Order received: {}", mapper.writeValueAsString(order));
-				service.process(order);
-			} catch (JsonProcessingException e) {
-				LOGGER.error("Error deserializing", e);
-			}
+			LOGGER.info("Order received: {}", mapper.writeValueAsString(order));
+			service.process(order);
 		};
 	}
 	

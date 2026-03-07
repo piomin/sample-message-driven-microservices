@@ -4,17 +4,14 @@ import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pl.piomin.services.messaging.Order;
 import pl.piomin.services.messaging.OrderStatus;
 import pl.piomin.services.product.messaging.OrderSender;
 import pl.piomin.services.product.model.Product;
 import pl.piomin.services.product.repository.ProductRepository;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class ProductService {
@@ -23,12 +20,15 @@ public class ProductService {
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	@Autowired
-	ProductRepository productRepository;
-	@Autowired
-	OrderSender orderSender;
+	private final ProductRepository productRepository;
+	private final OrderSender orderSender;
+
+	public ProductService(ProductRepository productRepository, OrderSender orderSender) {
+		this.productRepository = productRepository;
+		this.orderSender = orderSender;
+	}
 	
-	public void process(final Order order) throws JsonProcessingException {
+	public void process(final Order order) {
 		LOGGER.info("Order processed: {}", mapper.writeValueAsString(order));
 		for (Long productId : order.getProductIds()) {
 			Product product = productRepository.findById(productId);

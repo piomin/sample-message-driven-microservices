@@ -4,17 +4,14 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pl.piomin.services.account.messaging.OrderSender;
 import pl.piomin.services.account.model.Account;
 import pl.piomin.services.account.repository.AccountRepository;
 import pl.piomin.services.messaging.Order;
 import pl.piomin.services.messaging.OrderStatus;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class AccountService {
@@ -23,12 +20,15 @@ public class AccountService {
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	@Autowired
-	AccountRepository accountRepository;
-	@Autowired
-	OrderSender orderSender;
+	private final AccountRepository accountRepository;
+	private final OrderSender orderSender;
+
+	public AccountService(AccountRepository accountRepository, OrderSender orderSender) {
+		this.accountRepository = accountRepository;
+		this.orderSender = orderSender;
+	}
 	
-	public void process(final Order order) throws JsonProcessingException {
+	public void process(final Order order) {
 		LOGGER.info("Order processed: {}", mapper.writeValueAsString(order));
 		List<Account> accounts =  accountRepository.findByCustomer(order.getCustomerId());
 		Account account = accounts.get(0);
