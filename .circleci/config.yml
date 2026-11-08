@@ -25,7 +25,7 @@ executors:
 
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
-  maven: circleci/maven@2.2.0
+  maven: circleci/maven@2.4.1
 
 workflows:
   maven_test:
